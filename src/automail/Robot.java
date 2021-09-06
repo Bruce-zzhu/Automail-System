@@ -171,9 +171,13 @@ public class Robot {
 
 	public void addToTube(MailItem mailItem) throws ItemTooHeavyException {
 		assert(tube == null);
-		tube = mailItem;
+		// fill the tube if the robot is not a fast robot
+		if (!(this instanceof FastRobot)) {
+            tube = mailItem;
+        }
+
 		if (tube.weight > INDIVIDUAL_MAX_WEIGHT) throw new ItemTooHeavyException();
 	}
-	
+
 
 }
