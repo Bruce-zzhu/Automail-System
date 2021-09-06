@@ -26,6 +26,9 @@ public class Robot {
     private MailItem tube = null;
 
     private int deliveryCounter;
+
+    private int totalUnits;
+    private final int speed;
     
 
     /**
@@ -34,15 +37,17 @@ public class Robot {
      * @param delivery governs the final delivery
      * @param mailPool is the source of mail items
      */
-    public Robot(IMailDelivery delivery, MailPool mailPool, String id){
+    public Robot(IMailDelivery delivery, MailPool mailPool, String id, int speed){
        	this.id = id;
         // current_state = RobotState.WAITING;
     	current_state = RobotState.RETURNING;
         current_floor = Building.getInstance().getMailroomLocationFloor();
         this.delivery = delivery;
         this.mailPool = mailPool;
+        this.speed = speed;
         this.receivedDispatch = false;
         this.deliveryCounter = 0;
+        this.totalUnits = 0;
     }
     
     /**
@@ -121,9 +126,9 @@ public class Robot {
      */
     private void moveTowards(int destination) {
         if(current_floor < destination){
-            current_floor++;
+            current_floor += Math.min(speed, destination - current_floor);
         } else {
-            current_floor--;
+            current_floor -= Math.min(speed, current_floor - destination);
         }
     }
     

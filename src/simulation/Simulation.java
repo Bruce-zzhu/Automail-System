@@ -12,7 +12,6 @@ import util.ReportDelivery;
 
 import java.util.HashMap;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  * This class simulates the behaviour of AutoMail
@@ -87,9 +86,8 @@ public class Simulation {
 //					automail.getRobots()[i].operate();
 //				}
                 ArrayList<Robot> robots = automail.getRobots();
-                Iterator<Robot> iter = robots.iterator();
-                while (iter.hasNext()) {
-                    iter.next().operate();
+                for (Robot robot: robots) {
+                    robot.operate();
                 }
 
 			} catch (ExcessiveDeliveryException|ItemTooHeavyException e) {
