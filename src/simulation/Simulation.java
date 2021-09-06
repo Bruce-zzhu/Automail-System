@@ -3,6 +3,7 @@ package simulation;
 import automail.Automail;
 import automail.Building;
 import automail.MailPool;
+import automail.Robot;
 import com.unimelb.swen30006.wifimodem.WifiModem;
 import exceptions.ExcessiveDeliveryException;
 import exceptions.ItemTooHeavyException;
@@ -10,6 +11,8 @@ import util.Configuration;
 import util.ReportDelivery;
 
 import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * This class simulates the behaviour of AutoMail
@@ -79,10 +82,16 @@ public class Simulation {
             mailGenerator.addToMailPool();
             try {
                 automail.getMailPool().loadItemsToRobot();
-				for (int i=0; i < total_robots; i++)
-				{
-					automail.getRobots()[i].operate();
-				}
+//				for (int i=0; i < total_robots; i++)
+//				{
+//					automail.getRobots()[i].operate();
+//				}
+                ArrayList<Robot> robots = automail.getRobots();
+                Iterator<Robot> iter = robots.iterator();
+                while (iter.hasNext()) {
+                    iter.next().operate();
+                }
+
 			} catch (ExcessiveDeliveryException|ItemTooHeavyException e) {
 				e.printStackTrace();
 				System.out.println("Simulation unable to complete.");

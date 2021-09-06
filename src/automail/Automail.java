@@ -20,6 +20,7 @@ public class Automail {
 //            robots[i] = new Robot(delivery, mailPool, i);
 //        }
 
+        // Initialize robots
         robots = new ArrayList<Robot>();
         for (int i = 0; i < numRegRobots; i++) robots.add(new RegularRobot(delivery, mailPool, i));
         for (int i = 0; i < numFastRobots; i++) robots.add(new FastRobot(delivery, mailPool, i));

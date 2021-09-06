@@ -34,8 +34,8 @@ public class Robot {
      * @param delivery governs the final delivery
      * @param mailPool is the source of mail items
      */
-    public Robot(IMailDelivery delivery, MailPool mailPool, int number){
-    	this.id = "R" + number;
+    public Robot(IMailDelivery delivery, MailPool mailPool, String id){
+       	this.id = id;
         // current_state = RobotState.WAITING;
     	current_state = RobotState.RETURNING;
         current_floor = Building.getInstance().getMailroomLocationFloor();
