@@ -125,11 +125,15 @@ public class Robot {
      * @param destination the floor towards which the robot is moving
      */
     private void moveTowards(int destination) {
+        int moveUnits = 0;
         if(current_floor < destination){
-            current_floor += Math.min(speed, destination - current_floor);
+            moveUnits = Math.min(speed, destination - current_floor);
+            current_floor += moveUnits;
         } else {
-            current_floor -= Math.min(speed, current_floor - destination);
+            moveUnits = Math.min(speed, current_floor - destination);
+            current_floor -= moveUnits;
         }
+        this.totalUnits += moveUnits;
     }
     
     public String getIdTube() {
@@ -170,5 +174,6 @@ public class Robot {
 		tube = mailItem;
 		if (tube.weight > INDIVIDUAL_MAX_WEIGHT) throw new ItemTooHeavyException();
 	}
+	
 
 }
