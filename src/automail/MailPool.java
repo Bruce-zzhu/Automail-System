@@ -52,9 +52,15 @@ public class MailPool {
 			try {
 				robot.addToHand(j.next().mailItem); // hand first as we want higher priority delivered first
 				j.remove();
-			if (pool.size() > 0 && !(robot instanceof FastRobot)) {  // add to tube if the robot is not a fast robot
-				robot.addToTube(j.next().mailItem);
-				j.remove();
+				if (pool.size() > 0 && !(robot instanceof FastRobot)) {  // add to tube if the robot is not a fast robot
+					robot.addToTube(j.next().mailItem);
+					j.remove();
+					if (robot instanceof BulkRobot) {
+						while(pool.size() > 0 && ((BulkRobot) robot).getTubeSize() < 5) {
+							robot.addToTube(j.next().mailItem);
+							j.remove();
+						}
+					}
 			}
 			robot.dispatch(); // send the robot off if it has any items to deliver
 			i.remove();       // remove from mailPool queue

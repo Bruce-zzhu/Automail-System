@@ -10,25 +10,25 @@ import simulation.IMailDelivery;
  */
 public class Robot {
 
-    private static final int INDIVIDUAL_MAX_WEIGHT = 2000;
+    protected static final int INDIVIDUAL_MAX_WEIGHT = 2000;
 
-    private IMailDelivery delivery;
-    private final String id;
+    protected IMailDelivery delivery;
+    protected final String id;
     /** Possible states the robot can be in */
     public enum RobotState { DELIVERING, WAITING, RETURNING }
-    private RobotState current_state;
-    private int current_floor;
-    private int destination_floor;
-    private MailPool mailPool;
-    private boolean receivedDispatch;
+    protected RobotState current_state;
+    protected int current_floor;
+    protected int destination_floor;
+    protected MailPool mailPool;
+    protected boolean receivedDispatch;
 
-    private MailItem deliveryItem = null;
-    private MailItem tube = null;
+    protected MailItem deliveryItem = null;
+    protected MailItem tube = null;
 
-    private int deliveryCounter;
+    protected int deliveryCounter;
 
-    private int totalUnits;
-    private final int speed;
+    protected int totalUnits;
+    protected final int speed;
     
 
     /**
@@ -115,7 +115,7 @@ public class Robot {
     /**
      * Sets the route for the robot
      */
-    private void setDestination() {
+    public void setDestination() {
         /** Set the destination floor */
         destination_floor = deliveryItem.getDestFloor();
     }
@@ -124,7 +124,7 @@ public class Robot {
      * Generic function that moves the robot towards the destination
      * @param destination the floor towards which the robot is moving
      */
-    private void moveTowards(int destination) {
+    public void moveTowards(int destination) {
         int moveUnits = 0;
         if(current_floor < destination){
             moveUnits = Math.min(speed, destination - current_floor);
@@ -144,7 +144,7 @@ public class Robot {
      * Prints out the change in state
      * @param nextState the state to which the robot is transitioning
      */
-    private void changeState(RobotState nextState){
+    public void changeState(RobotState nextState){
     	assert(!(deliveryItem == null && tube != null));
     	if (current_state != nextState) {
             System.out.printf("T: %3d > %7s changed from %s to %s%n", Clock.Time(), getIdTube(), current_state, nextState);
@@ -171,11 +171,7 @@ public class Robot {
 
 	public void addToTube(MailItem mailItem) throws ItemTooHeavyException {
 		assert(tube == null);
-		// fill the tube if the robot is not a fast robot
-		if (!(this instanceof FastRobot)) {
-            tube = mailItem;
-        }
-
+		tube = mailItem;
 		if (tube.weight > INDIVIDUAL_MAX_WEIGHT) throw new ItemTooHeavyException();
 	}
 
