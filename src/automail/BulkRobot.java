@@ -7,6 +7,13 @@ import simulation.IMailDelivery;
 public class BulkRobot extends Robot {
     protected int TUBE_CAPACITY = 5;
 
+    /**
+     * Initiates the robot's location at the start to be at the mailroom
+     * also set it to be waiting for mail.
+     * @param number gives the id of current robot
+     * @param delivery governs the final delivery
+     * @param mailPool is the source of mail items
+     */
     public BulkRobot(IMailDelivery delivery, MailPool mailPool, int number) {
         super(delivery, mailPool);
         this.id = "B" + number;
