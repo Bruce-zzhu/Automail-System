@@ -21,7 +21,7 @@ public abstract class Robot extends Carrier {
     private int deliveryCounter;
 
     private int steps = 0;
-    
+    private int speed = 1;
 
     /**
      * Initiates the robot's location at the start to be at the mailroom
@@ -111,6 +111,7 @@ public abstract class Robot extends Carrier {
         } else {
             current_floor--;
         }
+        steps++;
     }
     
     public String getIdTube() {
@@ -141,4 +142,19 @@ public abstract class Robot extends Carrier {
         this.steps = steps;
     }
 
+    public int getCurrentFloor() {
+        return current_floor;
+    }
+
+    public void setCurrentFloor(int number) {
+        current_floor = number;
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
 }
