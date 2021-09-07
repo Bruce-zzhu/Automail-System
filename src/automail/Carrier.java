@@ -39,6 +39,19 @@ public abstract class Carrier {
         if (mailItem.weight > INDIVIDUAL_MAX_WEIGHT) throw new ItemTooHeavyException();
     }
 
+    /** When delivery complete, report this to the simulator, remove delivery item */
+    public void deliver(String additionalLog) {
+        delivery.deliver((Robot) this, deliveryItem, ""); // report to simulator
+
+        /** remove the delivery item **/
+        int index = tube.indexOf(deliveryItem);
+        if (index >= 0) {
+            /** Delivery item is the in the tube, remove also the item in tube **/
+            tube.remove(index);
+        }
+        deliveryItem = null;
+    }
+
     public boolean isEmpty() {
         return (deliveryItem == null && tube.size() == 0);
     }

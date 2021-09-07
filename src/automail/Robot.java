@@ -70,12 +70,7 @@ public abstract class Robot extends Carrier {
     		case DELIVERING:
     			if(current_floor == destination_floor){ // If already here drop off either way
                     /** Delivery complete, report this to the simulator! */
-                    delivery.deliver(this, deliveryItem, "");
-                    if (deliveryItem == tube.get(tube.size()-1)) {
-                        /** Delivery item is the item on the top of the tube, remove the item **/
-                        getTopTube();
-                    }
-                    deliveryItem = null;
+                    this.deliver("");
                     deliveryCounter++;
                     if(deliveryCounter > TUBE_CAPACITY){  // Implies a simulation bug
                     	throw new ExcessiveDeliveryException();
