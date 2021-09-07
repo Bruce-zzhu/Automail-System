@@ -5,7 +5,9 @@ import simulation.IMailDelivery;
 
 /** The bulk robot deliver mails with more capacity **/
 public class BulkRobot extends Robot {
-    protected int TUBE_CAPACITY = 5;
+    {
+        TUBE_CAPACITY = 5;
+    }
 
     /**
      * Initiates the robot's location at the start to be at the mailroom
