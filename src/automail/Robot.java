@@ -10,6 +10,7 @@ import simulation.IMailDelivery;
  */
 public class Robot extends Carrier {
     private final String id;
+
     /** Possible states the robot can be in */
     public enum RobotState { DELIVERING, WAITING, RETURNING }
     private RobotState current_state;
@@ -134,10 +135,13 @@ public class Robot extends Carrier {
     	}
     }
 
+    /** Getter and Setters **/
+    public int getSteps() {
+        return steps;
+    }
 
-
-	public boolean isEmpty() {
-		return (deliveryItem == null && tube.size() == 0);
-	}
+    public void setSteps(int steps) {
+        this.steps = steps;
+    }
 
 }
