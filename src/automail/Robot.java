@@ -8,11 +8,7 @@ import simulation.IMailDelivery;
 /**
  * The robot delivers mail!
  */
-public class Robot {
-
-    private static final int INDIVIDUAL_MAX_WEIGHT = 2000;
-
-    private IMailDelivery delivery;
+public class Robot extends Carrier {
     private final String id;
     /** Possible states the robot can be in */
     public enum RobotState { DELIVERING, WAITING, RETURNING }
@@ -20,10 +16,6 @@ public class Robot {
     private int current_floor;
     private int destination_floor;
     private MailPool mailPool;
-    private boolean receivedDispatch;
-
-    private MailItem deliveryItem = null;
-    private MailItem tube = null;
 
     private int deliveryCounter;
     
@@ -35,22 +27,16 @@ public class Robot {
      * @param mailPool is the source of mail items
      */
     public Robot(IMailDelivery delivery, MailPool mailPool, int number){
+        super(delivery);
     	this.id = "R" + number;
         // current_state = RobotState.WAITING;
     	current_state = RobotState.RETURNING;
         current_floor = Building.getInstance().getMailroomLocationFloor();
-        this.delivery = delivery;
         this.mailPool = mailPool;
-        this.receivedDispatch = false;
         this.deliveryCounter = 0;
     }
     
-    /**
-     * This is called when a robot is assigned the mail items and ready to dispatch for the delivery 
-     */
-    public void dispatch() {
-    	receivedDispatch = true;
-    }
+
 
     /**
      * This is called on every time step
@@ -89,13 +75,13 @@ public class Robot {
                     	throw new ExcessiveDeliveryException();
                     }
                     /** Check if want to return, i.e. if there is no item in the tube*/
-                    if(tube == null){
+                    if(tube.size() == 0){
                     	changeState(RobotState.RETURNING);
                     }
                     else{
                         /** If there is another item, set the robot's route to the location to deliver the item */
-                        deliveryItem = tube;
-                        tube = null;
+                        deliveryItem = tube.get(0);
+                        tube.remove(0);
                         setDestination();
                         changeState(RobotState.DELIVERING);
                     }
@@ -128,15 +114,15 @@ public class Robot {
     }
     
     public String getIdTube() {
-    	return String.format("%s(%1d)", this.id, (tube == null ? 0 : 1));
+    	return String.format("%s(%1d)", this.id, (tube.size()));
     }
-    
+
     /**
      * Prints out the change in state
      * @param nextState the state to which the robot is transitioning
      */
     private void changeState(RobotState nextState){
-    	assert(!(deliveryItem == null && tube != null));
+    	assert(!(deliveryItem == null && tube.size() != 0));
     	if (current_state != nextState) {
             System.out.printf("T: %3d > %7s changed from %s to %s%n", Clock.Time(), getIdTube(), current_state, nextState);
     	}
@@ -146,24 +132,10 @@ public class Robot {
     	}
     }
 
-	public MailItem getTube() {
-		return tube;
-	}
+
 
 	public boolean isEmpty() {
-		return (deliveryItem == null && tube == null);
-	}
-
-	public void addToHand(MailItem mailItem) throws ItemTooHeavyException {
-		assert(deliveryItem == null);
-		deliveryItem = mailItem;
-		if (deliveryItem.weight > INDIVIDUAL_MAX_WEIGHT) throw new ItemTooHeavyException();
-	}
-
-	public void addToTube(MailItem mailItem) throws ItemTooHeavyException {
-		assert(tube == null);
-		tube = mailItem;
-		if (tube.weight > INDIVIDUAL_MAX_WEIGHT) throw new ItemTooHeavyException();
+		return (deliveryItem == null && tube.size() == 0);
 	}
 
 }
