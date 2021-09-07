@@ -18,6 +18,8 @@ public class Robot extends Carrier {
     private MailPool mailPool;
 
     private int deliveryCounter;
+
+    private int steps = 0;
     
 
     /**
@@ -80,8 +82,8 @@ public class Robot extends Carrier {
                     }
                     else{
                         /** If there is another item, set the robot's route to the location to deliver the item */
-                        deliveryItem = tube.get(0);
-                        tube.remove(0);
+                        deliveryItem = tube.get(tube.size()-1); /** Get the top item in the tube **/
+                        tube.remove(tube.size()-1);
                         setDestination();
                         changeState(RobotState.DELIVERING);
                     }
