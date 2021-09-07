@@ -3,7 +3,7 @@ package automail;
 import exceptions.ItemTooHeavyException;
 import simulation.IMailDelivery;
 
-/** The bulk robot deliver mails with more capacity **/
+/** The bulk robot deliver mails with more capacity in tube and no hands **/
 public class BulkRobot extends Robot {
     {
         TUBE_CAPACITY = 5;
