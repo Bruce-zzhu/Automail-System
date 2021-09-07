@@ -8,8 +8,8 @@ import simulation.IMailDelivery;
 /**
  * The robot delivers mail!
  */
-public class Robot extends Carrier {
-    private final String id;
+public abstract class Robot extends Carrier {
+    protected String id;
 
     /** Possible states the robot can be in */
     public enum RobotState { DELIVERING, WAITING, RETURNING }
@@ -29,9 +29,8 @@ public class Robot extends Carrier {
      * @param delivery governs the final delivery
      * @param mailPool is the source of mail items
      */
-    public Robot(IMailDelivery delivery, MailPool mailPool, int number){
+    public Robot(IMailDelivery delivery, MailPool mailPool){
         super(delivery);
-    	this.id = "R" + number;
         // current_state = RobotState.WAITING;
     	current_state = RobotState.RETURNING;
         current_floor = Building.getInstance().getMailroomLocationFloor();
@@ -72,6 +71,10 @@ public class Robot extends Carrier {
     			if(current_floor == destination_floor){ // If already here drop off either way
                     /** Delivery complete, report this to the simulator! */
                     delivery.deliver(this, deliveryItem, "");
+                    if (deliveryItem == tube.get(tube.size()-1)) {
+                        /** Delivery item is the item on the top of the tube, remove the item **/
+                        getTopTube();
+                    }
                     deliveryItem = null;
                     deliveryCounter++;
                     if(deliveryCounter > TUBE_CAPACITY){  // Implies a simulation bug
@@ -83,8 +86,7 @@ public class Robot extends Carrier {
                     }
                     else{
                         /** If there is another item, set the robot's route to the location to deliver the item */
-                        deliveryItem = tube.get(tube.size()-1); /** Get the top item in the tube **/
-                        tube.remove(tube.size()-1);
+                        deliveryItem = getTopTube();
                         setDestination();
                         changeState(RobotState.DELIVERING);
                     }
@@ -143,5 +145,5 @@ public class Robot extends Carrier {
     public void setSteps(int steps) {
         this.steps = steps;
     }
-
+    
 }

@@ -46,4 +46,10 @@ public abstract class Carrier {
     public ArrayList<MailItem> getTube() {
         return tube;
     }
+
+    public MailItem getTopTube() {
+        assert(tube.size() > 0);
+        MailItem item = tube.get(tube.size()-1);
+        return item;
+    }
 }
