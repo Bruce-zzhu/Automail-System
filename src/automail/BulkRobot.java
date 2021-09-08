@@ -1,6 +1,6 @@
 package automail;
 
-import exceptions.ExcessiveDeliveryException;
+import exceptions.BulkRobotExcessiveDeliveryException;
 import exceptions.ItemTooHeavyException;
 import simulation.Clock;
 import simulation.IMailDelivery;
@@ -23,7 +23,8 @@ public class BulkRobot extends Robot {
     @Override
     public void addToTube(MailItem mailItem) throws ItemTooHeavyException {
         this.tube.add(mailItem);
-        if (mailItem.weight > super.INDIVIDUAL_MAX_WEIGHT) throw new ItemTooHeavyException();
+        deliveryItem = mailItem;
+        if (mailItem.weight > INDIVIDUAL_MAX_WEIGHT) throw new ItemTooHeavyException();
     }
 
 
@@ -37,29 +38,14 @@ public class BulkRobot extends Robot {
         return (deliveryItem == null && tube.size() == 0);
     }
 
-    @Override
-    public void setDestination() {
-        /** Set the destination floor */
-        destination_floor = tube.get(tube.size()-1).getDestFloor();
-    }
 
-    @Override
-    public void changeState(RobotState nextState){
-        if (current_state != nextState) {
-            System.out.printf("T: %3d > %7s changed from %s to %s%n", Clock.Time(), getIdTube(), current_state, nextState);
-        }
-        current_state = nextState;
-        if(nextState == RobotState.DELIVERING){
-            System.out.printf("T: %3d > %7s-> [%s]%n", Clock.Time(), getIdTube(), tube.get(tube.size()-1).toString());
-        }
-    }
 
     public int getTubeSize() {
         return tube.size();
     }
 
     @Override
-    public void operate() throws ExcessiveDeliveryException {
+    public void operate() throws BulkRobotExcessiveDeliveryException {
         switch (current_state) {
             /** This state is triggered when the robot is returning to the mailroom after a delivery */
             case RETURNING:
@@ -86,16 +72,17 @@ public class BulkRobot extends Robot {
                 if (current_floor == destination_floor) { // If already here drop off either way
                     /** Delivery complete, report this to the simulator! */
                     delivery.deliver(this, deliveryItem, "");
-
                     deliveryCounter++;
                     if (deliveryCounter > MAX_CARRY_ITEM) {  // Implies a simulation bug
-                        throw new ExcessiveDeliveryException();
+                        throw new BulkRobotExcessiveDeliveryException();
                     }
                     /** Check if want to return, i.e. if there is no item in the tube*/
                     if (tube.size() == 0) {
+                        deliveryItem = null;
                         changeState(RobotState.RETURNING);
                     } else {
                         /** If there is another item, set the robot's route to the location to deliver the item */
+                        deliveryItem = tube.get(tube.size()-1);
                         tube.remove(tube.size()-1);
                         setDestination();
                         changeState(RobotState.DELIVERING);

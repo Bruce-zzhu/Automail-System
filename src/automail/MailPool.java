@@ -57,7 +57,7 @@ public class MailPool {
 					j.remove();
 					if (robot instanceof BulkRobot) {
 						while(pool.size() > 0 && ((BulkRobot) robot).getTubeSize() < 5) {
-							robot.addToTube(j.next().mailItem);
+							((BulkRobot) robot).addToTube(j.next().mailItem);
 							j.remove();
 						}
 					}
