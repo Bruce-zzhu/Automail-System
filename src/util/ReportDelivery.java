@@ -1,5 +1,7 @@
 package util;
 
+import automail.Automail;
+import automail.ChargeGenerator;
 import automail.MailItem;
 import automail.Robot;
 import exceptions.MailAlreadyDeliveredException;
@@ -10,6 +12,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import util.Configuration;
+
 public class ReportDelivery implements IMailDelivery {
 
 
@@ -17,18 +21,29 @@ public class ReportDelivery implements IMailDelivery {
     private Set<MailItem> deliveredItems;
     private static double total_delay = 0;
 
-    public ReportDelivery()
-    {
+    private ChargeGenerator charger = ChargeGenerator.getInstance();
+
+    public ReportDelivery() throws Exception {
         deliveredItems = new HashSet<>();
     }
 
     /** Confirm the delivery and calculate the total score */
     @Override
     public void deliver(Robot robot, MailItem deliveryItem, String additionalLog ){
+        Configuration configuration = Configuration.getInstance();
+        String feeInfo = "";
         if(!deliveredItems.contains(deliveryItem))
         {
             deliveredItems.add(deliveryItem);
-            System.out.printf("T: %3d > %7s-> Delivered(%4d) [%s%s]%n", Clock.Time(), robot.getIdTube(), deliveredItems.size(), deliveryItem.toString(), additionalLog);
+            if (Boolean.parseBoolean(configuration.getProperty(Configuration.FEE_CHARGING_KEY))) {
+                /** need to charge fee, generate fee charging information **/
+                feeInfo = String.format(" | Service Fee : %.2f | Maintenance: %.2f | Avg. Operating Time: %.2f | Total Charge: %.2f"
+                        , charger.getServiceFee(robot)
+                        , charger.getMaintenanceFee(robot)
+                        , charger.getAvgOptTime(robot)
+                        , charger.getTotalCharge(robot));
+            }
+            System.out.printf("T: %3d > %7s-> Delivered(%4d) [%s%s]%n", Clock.Time(), robot.getIdTube(), deliveredItems.size(), deliveryItem.toString(), feeInfo);
             // Calculate delivery score
             total_delay += calculateDeliveryDelay(deliveryItem);
         }

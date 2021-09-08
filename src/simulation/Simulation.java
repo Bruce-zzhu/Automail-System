@@ -2,6 +2,7 @@ package simulation;
 
 import automail.Automail;
 import automail.Building;
+import automail.ChargeGenerator;
 import automail.MailPool;
 import com.unimelb.swen30006.wifimodem.WifiModem;
 import exceptions.ExcessiveDeliveryException;
@@ -65,6 +66,11 @@ public class Simulation {
         int num_bulk_robots = Integer.parseInt(configuration.getProperty(Configuration.BULK_ROBOTS_KEY));
         int total_robots = num_regular_robots + num_fast_robots + num_bulk_robots;
         Automail automail = new Automail(mailPool, iMailDelivery, num_regular_robots, num_fast_robots, num_bulk_robots);
+
+        /** Initialize charger **/
+        ChargeGenerator charger = ChargeGenerator.getInstance();
+        charger.setAutomail(automail);
+        charger.setWifiModem(wifiModem);
 
         int mail_to_create = Integer.parseInt(configuration.getProperty(Configuration.MAIL_TO_CREATE_KEY));
         int mail_max_weight = Integer.parseInt(configuration.getProperty(Configuration.MAIL_MAX_WEIGHT_KEY));
