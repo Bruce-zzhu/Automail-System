@@ -29,4 +29,21 @@ public class Automail {
     public MailPool getMailPool() {
         return mailPool;
     }
+
+    public double getAvgOptTime(Robot robot) {
+        double num = 0;
+        double totalSteps = robot.getSteps();
+        Robot currentRobot;
+        /** Get total steps of all robots with the same type of inputted robot **/
+        for (int i=0; i<robots.length; i++) {
+            currentRobot = robots[i];
+            if (robot.id.substring(0,1) == currentRobot.id.substring(0,1)) {
+                totalSteps += currentRobot.getSteps();
+                num++;
+            }
+        }
+
+        return totalSteps/num;
+    }
+
 }
