@@ -1,5 +1,6 @@
 package util;
 
+import automail.BulkRobot;
 import automail.MailItem;
 import automail.Robot;
 import exceptions.MailAlreadyDeliveredException;
@@ -28,13 +29,18 @@ public class ReportDelivery implements IMailDelivery {
         if(!deliveredItems.contains(deliveryItem))
         {
             deliveredItems.add(deliveryItem);
-            System.out.printf("T: %3d > %7s-> Delivered(%4d) [%s%s]%n", Clock.Time(), robot.getIdTube(), deliveredItems.size(), deliveryItem.toString(), additionalLog);
+            if (robot instanceof BulkRobot) {
+                System.out.printf("T: %3d > %7s-> Delivered(%4d) [%s%s]%n", Clock.Time(), ((BulkRobot) robot).getIdTube(), deliveredItems.size(), deliveryItem.toString(), additionalLog);
+
+            } else {
+                System.out.printf("T: %3d > %7s-> Delivered(%4d) [%s%s]%n", Clock.Time(), robot.getIdTube(), deliveredItems.size(), deliveryItem.toString(), additionalLog);
+            }
             // Calculate delivery score
             total_delay += calculateDeliveryDelay(deliveryItem);
         }
         else{
             try {
-                throw new MailAlreadyDeliveredException();
+                throw new MailAlreadyDeliveredException(deliveryItem.getId());
             } catch (MailAlreadyDeliveredException e) {
                 e.printStackTrace();
             }

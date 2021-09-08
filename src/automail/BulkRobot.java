@@ -28,10 +28,6 @@ public class BulkRobot extends Robot {
     }
 
 
-    @Override
-    public void addToHand(MailItem mailItem) throws ItemTooHeavyException {
-        // do nothing
-    }
 
     @Override
     public boolean isEmpty() {
@@ -72,8 +68,9 @@ public class BulkRobot extends Robot {
                 if (current_floor == destination_floor) { // If already here drop off either way
                     /** Delivery complete, report this to the simulator! */
                     delivery.deliver(this, deliveryItem, "");
+                    tube.remove(tube.size()-1);
                     deliveryCounter++;
-                    if (deliveryCounter > MAX_CARRY_ITEM) {  // Implies a simulation bug
+                    if (deliveryCounter > MAX_CARRY_ITEM + 1) {  // all items are in the tube
                         throw new BulkRobotExcessiveDeliveryException();
                     }
                     /** Check if want to return, i.e. if there is no item in the tube*/
@@ -83,7 +80,7 @@ public class BulkRobot extends Robot {
                     } else {
                         /** If there is another item, set the robot's route to the location to deliver the item */
                         deliveryItem = tube.get(tube.size()-1);
-                        tube.remove(tube.size()-1);
+
                         setDestination();
                         changeState(RobotState.DELIVERING);
                     }
