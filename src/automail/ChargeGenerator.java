@@ -14,7 +14,7 @@ public class ChargeGenerator {
     private HashMap<Integer, Double> recentServiceFee = new HashMap<>();
 
     private Automail automail;
-    private WifiModem wifiModem;
+    private WifiModem wifiModem = WifiModem.getInstance(Building.getInstance().getMailroomLocationFloor());
 
     private static ChargeGenerator charger;
 
@@ -66,10 +66,6 @@ public class ChargeGenerator {
 
     public void setAutomail(Automail automail) {
         this.automail = automail;
-    }
-
-    public void setWifiModem(WifiModem wifiModem) {
-        this.wifiModem = wifiModem;
     }
 
     public void updateRecentServiceFee(int floor, double fee) {

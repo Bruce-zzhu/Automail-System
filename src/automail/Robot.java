@@ -72,7 +72,7 @@ public abstract class Robot extends Carrier {
                     /** Delivery complete, report this to the simulator! */
                     this.deliver("");
                     deliveryCounter++;
-                    if(deliveryCounter > TUBE_CAPACITY){  // Implies a simulation bug
+                    if(deliveryCounter > TUBE_CAPACITY + 1){  // Implies a simulation bug
                     	throw new ExcessiveDeliveryException();
                     }
                     /** Check if want to return, i.e. if there is no item in the tube*/

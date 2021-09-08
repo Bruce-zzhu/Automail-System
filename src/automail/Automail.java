@@ -6,8 +6,9 @@ public class Automail {
 
     private Robot[] robots;
     private MailPool mailPool;
+    ChargeGenerator charger = ChargeGenerator.getInstance();
     
-    public Automail(MailPool mailPool, IMailDelivery delivery, int numRegRobots, int numFastRobots, int numBulkRobots) {  	
+    public Automail(MailPool mailPool, IMailDelivery delivery, int numRegRobots, int numFastRobots, int numBulkRobots) throws Exception {
     	/** Initialize the MailPool */
     	
     	this.mailPool = mailPool;
@@ -20,6 +21,9 @@ public class Automail {
         for (int i = index; i < index+numFastRobots; i++) robots[i] = new FastRobot(delivery, mailPool, i);
         index += numFastRobots;
         for (int i = index; i < index+numBulkRobots; i++) robots[i] = new BulkRobot(delivery, mailPool, i);
+
+        /** Initialize charger **/
+        charger.setAutomail(this);
     }
 
     public Robot[] getRobots() {
