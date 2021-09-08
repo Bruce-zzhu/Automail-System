@@ -13,7 +13,7 @@ public abstract class Carrier {
     protected boolean receivedDispatch;
     protected IMailDelivery delivery;
     protected MailItem deliveryItem = null;
-    protected ArrayList<MailItem>  tube = null;
+    protected ArrayList<MailItem>  tube = new ArrayList<>();
 
     public Carrier(IMailDelivery delivery) {
         this.delivery = delivery;
