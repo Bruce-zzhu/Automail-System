@@ -52,7 +52,7 @@ public class MailPool {
 			try {
 			robot.addToHand(j.next().mailItem); // hand first as we want higher priority delivered first
 			j.remove();
-			if (pool.size() > 0) {
+			while (pool.size() > 0 && robot.tube.size() < robot.TUBE_CAPACITY) {
 				robot.addToTube(j.next().mailItem);
 				j.remove();
 			}

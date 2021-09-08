@@ -60,16 +60,13 @@ public class ChargeGenerator {
             service = recentServiceFee.get(currentFloor);
         }
 
+        recentServiceFee.put(currentFloor, service);
         return service;
     }
 
 
     public void setAutomail(Automail automail) {
         this.automail = automail;
-    }
-
-    public void updateRecentServiceFee(int floor, double fee) {
-        recentServiceFee.put(floor, fee);
     }
 
     public double getAvgOptTime(Robot robot) {

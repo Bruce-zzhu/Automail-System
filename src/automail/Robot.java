@@ -154,7 +154,7 @@ public abstract class Robot extends Carrier {
         return speed;
     }
 
-    public void setSpeed(int speed) {
+    protected void setSpeed(int speed) {
         this.speed = speed;
     }
 }

@@ -34,7 +34,7 @@ public abstract class Carrier {
     }
 
     public void addToTube(MailItem mailItem) throws ItemTooHeavyException {
-        assert(tube.size() < TUBE_CAPACITY);
+        assert(tube.size() <= TUBE_CAPACITY);
         tube.add(mailItem);
         if (mailItem.weight > INDIVIDUAL_MAX_WEIGHT) throw new ItemTooHeavyException();
     }

@@ -4,11 +4,6 @@ import simulation.IMailDelivery;
 
 /** A fast delivery robot with faster speed and no tube **/
 public class FastRobot extends Robot{
-    {
-        TUBE_CAPACITY = 0;
-        setSpeed(3);
-    }
-
     /**
      * Initiates the robot's location at the start to be at the mailroom
      * also set it to be waiting for mail.
@@ -19,6 +14,8 @@ public class FastRobot extends Robot{
     public FastRobot(IMailDelivery delivery, MailPool mailPool, int number) {
         super(delivery, mailPool);
         this.id = "F" + number;
+        TUBE_CAPACITY = 0;
+        setSpeed(3);
     }
 
     /**
