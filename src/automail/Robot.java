@@ -1,6 +1,5 @@
 package automail;
 
-import exceptions.BulkRobotExcessiveDeliveryException;
 import exceptions.ExcessiveDeliveryException;
 import exceptions.ItemTooHeavyException;
 import simulation.Clock;
@@ -67,7 +66,7 @@ public class Robot {
      * This is called on every time step
      * @throws ExcessiveDeliveryException if robot delivers more than the capacity of the tube without refilling
      */
-    public void operate() throws ExcessiveDeliveryException, BulkRobotExcessiveDeliveryException {
+    public void operate() throws ExcessiveDeliveryException {
     	switch(current_state) {
     		/** This state is triggered when the robot is returning to the mailroom after a delivery */
     		case RETURNING:
@@ -187,6 +186,14 @@ public class Robot {
 
 	public String getId() {
         return this.id;
+    }
+
+    public int getTotalUnits() {
+        return totalUnits;
+    }
+
+    public int getCurrentFloor() {
+        return current_floor;
     }
 
 

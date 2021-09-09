@@ -1,11 +1,8 @@
 package automail;
 
-import exceptions.BulkRobotExcessiveDeliveryException;
 import exceptions.ExcessiveDeliveryException;
 import exceptions.ItemTooHeavyException;
-import simulation.Clock;
 import simulation.IMailDelivery;
-import java.util.ArrayList;
 
 public class BulkRobot extends Robot {
     public BulkRobot(IMailDelivery delivery, MailPool mailPool, int number) {

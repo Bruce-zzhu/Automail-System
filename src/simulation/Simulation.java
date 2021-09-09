@@ -1,12 +1,8 @@
 package simulation;
 
-import automail.Automail;
-import automail.Building;
-import automail.MailPool;
-import automail.Robot;
+import automail.*;
 import com.unimelb.swen30006.wifimodem.WifiModem;
 import exceptions.ExcessiveDeliveryException;
-import exceptions.BulkRobotExcessiveDeliveryException;
 import exceptions.ItemTooHeavyException;
 import util.Configuration;
 import util.ReportDelivery;
@@ -72,6 +68,10 @@ public class Simulation {
         int mail_to_create = Integer.parseInt(configuration.getProperty(Configuration.MAIL_TO_CREATE_KEY));
         int mail_max_weight = Integer.parseInt(configuration.getProperty(Configuration.MAIL_MAX_WEIGHT_KEY));
         MailGenerator mailGenerator = new MailGenerator(mail_to_create, mail_max_weight, mailPool, seedMap);
+
+        /** Instantiate ChargeGenerator */
+        ChargeGenerator charger = ChargeGenerator.getInstance();
+        charger.setAutomail(automail);
         
         /** Generate all the mails */
         mailGenerator.generateAllMail();
@@ -82,16 +82,13 @@ public class Simulation {
             mailGenerator.addToMailPool();
             try {
                 automail.getMailPool().loadItemsToRobot();
-//				for (int i=0; i < total_robots; i++)
-//				{
-//					automail.getRobots()[i].operate();
-//				}
+
                 ArrayList<Robot> robots = automail.getRobots();
                 for (Robot robot: robots) {
                     robot.operate();
                 }
 
-			} catch (BulkRobotExcessiveDeliveryException|ExcessiveDeliveryException|ItemTooHeavyException e) {
+			} catch (ExcessiveDeliveryException|ItemTooHeavyException e) {
 				e.printStackTrace();
 				System.out.println("Simulation unable to complete.");
 				System.exit(0);

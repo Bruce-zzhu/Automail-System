@@ -1,6 +1,7 @@
 package util;
 
 import automail.BulkRobot;
+import automail.ChargeGenerator;
 import automail.MailItem;
 import automail.Robot;
 import exceptions.MailAlreadyDeliveredException;
@@ -13,24 +14,35 @@ import java.util.Set;
 
 public class ReportDelivery implements IMailDelivery {
 
-
     /**An array list to record mails that have been delivered*/
     private Set<MailItem> deliveredItems;
     private static double total_delay = 0;
 
-    public ReportDelivery()
-    {
+    private ChargeGenerator charger = ChargeGenerator.getInstance();
+    private Configuration configuration = Configuration.getInstance();
+
+    public ReportDelivery() throws Exception {
         deliveredItems = new HashSet<>();
     }
 
     /** Confirm the delivery and calculate the total score */
     @Override
     public void deliver(Robot robot, MailItem deliveryItem, String additionalLog ){
+        String feeInfo = "";
+
         if(!deliveredItems.contains(deliveryItem))
         {
             deliveredItems.add(deliveryItem);
+            if (Boolean.parseBoolean(configuration.getProperty(Configuration.FEE_CHARGING_KEY))) {
+                /** need to charge fee, generate fee charging information **/
+                feeInfo = String.format(" | Service Fee : %.2f | Maintenance: %.2f | Avg. Operating Time: %.2f | Total Charge: %.2f"
+                        , charger.getServiceFee(robot)
+                        , charger.getMaintenanceFee(robot)
+                        , charger.getAvgOptTime(robot)
+                        , charger.getTotalCharge(robot));
+            }
 
-            System.out.printf("T: %3d > %7s-> Delivered(%4d) [%s%s]%n", Clock.Time(), robot.getIdTube(), deliveredItems.size(), deliveryItem.toString(), additionalLog);
+            System.out.printf("T: %3d > %7s-> Delivered(%4d) [%s%s]%n", Clock.Time(), robot.getIdTube(), deliveredItems.size(), deliveryItem.toString(), feeInfo);
 
             // Calculate delivery score
             total_delay += calculateDeliveryDelay(deliveryItem);

@@ -6,7 +6,6 @@ import java.util.ArrayList;
 public class Automail {
 
     private ArrayList<Robot> robots;
-//    private Robot[] robots;
     private MailPool mailPool;
     
     public Automail(MailPool mailPool, IMailDelivery delivery, int numRegRobots, int numFastRobots, int numBulkRobots) {  	
@@ -30,11 +29,25 @@ public class Automail {
         return robots;
     }
 
-//    public Robot[] getRobots() {
-//        return robots;
-//    }
 
     public MailPool getMailPool() {
         return mailPool;
     }
+
+    public double getAvgOptTime(Robot currentRobot) {
+        String robotType = currentRobot.id.substring(0,1);
+        double num = 0;
+        double totalUnits = 0;
+
+        /** Get total units that all robots with the same type of inputted robot have been to */
+        for (Robot robot: robots) {
+            if (robot.id.substring(0,1).equals(robotType)) {
+                totalUnits += robot.getTotalUnits();
+                num++;
+            }
+        }
+
+        return totalUnits / num;
+    }
+
 }
