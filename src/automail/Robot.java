@@ -50,7 +50,7 @@ public class Robot {
         this.speed = speed;
         this.receivedDispatch = false;
         this.deliveryCounter = 0;
-        this.totalUnits = 0;
+        this.totalUnits = current_floor;
         this.TUBE_CAPACITY = tube_capacity;
         tube = new ArrayList<>(TUBE_CAPACITY);
     }
@@ -139,6 +139,7 @@ public class Robot {
             current_floor -= moveUnits;
         }
         this.totalUnits += moveUnits;
+        if(this instanceof FastRobot) System.out.println("Move "+moveUnits);
     }
     
     public String getIdTube() {
