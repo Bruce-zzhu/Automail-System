@@ -1,24 +1,18 @@
 package automail;
 
 import exceptions.BulkRobotExcessiveDeliveryException;
+import exceptions.ExcessiveDeliveryException;
 import exceptions.ItemTooHeavyException;
 import simulation.Clock;
 import simulation.IMailDelivery;
 import java.util.ArrayList;
 
 public class BulkRobot extends Robot {
-    private ArrayList<MailItem> tube;
-    private final int MAX_CARRY_ITEM = 5;
-
     public BulkRobot(IMailDelivery delivery, MailPool mailPool, int number) {
-        super(delivery, mailPool, "B" + number, 1);
-        tube = new ArrayList<>();
+        super(delivery, mailPool, "B" + number, 1, 5);
     }
 
-    @Override
-    public String getIdTube() {
-        return String.format("%s(%1d)", id, tube.size());
-    }
+
 
     @Override
     public void addToTube(MailItem mailItem) throws ItemTooHeavyException {
@@ -27,21 +21,15 @@ public class BulkRobot extends Robot {
         if (mailItem.weight > INDIVIDUAL_MAX_WEIGHT) throw new ItemTooHeavyException();
     }
 
-
-
     @Override
-    public boolean isEmpty() {
-        return (deliveryItem == null && tube.size() == 0);
+    public void addToHand(MailItem mailItem) throws ItemTooHeavyException {
+        // doesn't have hand, so item directly goes to tube
+        this.addToTube(mailItem);
     }
 
 
-
-    public int getTubeSize() {
-        return tube.size();
-    }
-
     @Override
-    public void operate() throws BulkRobotExcessiveDeliveryException {
+    public void operate() throws ExcessiveDeliveryException {
         switch (current_state) {
             /** This state is triggered when the robot is returning to the mailroom after a delivery */
             case RETURNING:
@@ -70,8 +58,8 @@ public class BulkRobot extends Robot {
                     delivery.deliver(this, deliveryItem, "");
                     tube.remove(tube.size()-1);
                     deliveryCounter++;
-                    if (deliveryCounter > MAX_CARRY_ITEM + 1) {  // all items are in the tube
-                        throw new BulkRobotExcessiveDeliveryException();
+                    if (deliveryCounter > TUBE_CAPACITY) {  // all items are in the tube
+                        throw new ExcessiveDeliveryException(this, TUBE_CAPACITY);
                     }
                     /** Check if want to return, i.e. if there is no item in the tube*/
                     if (tube.size() == 0) {

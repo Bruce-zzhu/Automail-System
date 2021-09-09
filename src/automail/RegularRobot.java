@@ -4,6 +4,6 @@ import simulation.IMailDelivery;
 
 public class RegularRobot extends Robot{
     public RegularRobot(IMailDelivery delivery, MailPool mailPool, int number) {
-        super(delivery, mailPool, "R" + number, 1);
+        super(delivery, mailPool, "R" + number, 1, 1);
     }
 }

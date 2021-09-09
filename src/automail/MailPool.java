@@ -50,22 +50,15 @@ public class MailPool {
 		ListIterator<Item> j = pool.listIterator();
 		if (pool.size() > 0) {
 			try {
-				if (!(robot instanceof BulkRobot)) {  // Bulk robot doesn't have hand
-					robot.addToHand(j.next().mailItem); // hand first as we want higher priority delivered first
-					j.remove();
-				}
-				if (pool.size() > 0 && !(robot instanceof FastRobot)) {  // Fast robot doesn't have tube
+				robot.addToHand(j.next().mailItem); // hand first as we want higher priority delivered first
+				j.remove();
+
+				// add to tube if tube has space
+				while (pool.size() > 0 && robot.getTubeSize() < robot.TUBE_CAPACITY) {
 					robot.addToTube(j.next().mailItem);
 					j.remove();
-					if (robot instanceof BulkRobot) {
-						// load more items to Bulk robot
-						while(pool.size() > 0 && ((BulkRobot) robot).getTubeSize() < 5) {
-							MailItem m = j.next().mailItem;
-							((BulkRobot) robot).addToTube(m);
-							j.remove();
-						}
-					}
-			}
+				}
+
 			robot.dispatch(); // send the robot off if it has any items to deliver
 			i.remove();       // remove from mailPool queue
 			} catch (Exception e) { 
