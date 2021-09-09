@@ -92,6 +92,7 @@ public class Robot {
     		case DELIVERING:
     			if(current_floor == destination_floor){ // If already here drop off either way
                     /** Delivery complete, report this to the simulator! */
+                    totalUnits += 1;
                     delivery.deliver(this, deliveryItem, "");
                     deliveryItem = null;
                     deliveryCounter++;

@@ -46,7 +46,7 @@ public class Automail {
                 num++;
             }
         }
-        
+
         if (num != 0) {
             return totalUnits / num;
         } else {

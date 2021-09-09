@@ -33,6 +33,7 @@ public class BulkRobot extends Robot {
                 /** If its current position is at the mailroom, then the robot should change state */
                 if (current_floor == Building.getInstance().getMailroomLocationFloor()) {
                     /** Tell the sorter the robot is ready */
+
                     mailPool.registerWaiting(this);
                     changeState(RobotState.WAITING);
                 } else {
@@ -52,8 +53,10 @@ public class BulkRobot extends Robot {
             case DELIVERING:
                 if (current_floor == destination_floor) { // If already here drop off either way
                     /** Delivery complete, report this to the simulator! */
-                    delivery.deliver(this, deliveryItem, "");
+                    totalUnits += 1;
                     tube.remove(tube.size()-1);
+                    delivery.deliver(this, deliveryItem, "");
+
                     deliveryCounter++;
                     if (deliveryCounter > TUBE_CAPACITY) {  // all items are in the tube
                         throw new ExcessiveDeliveryException(this, TUBE_CAPACITY);
