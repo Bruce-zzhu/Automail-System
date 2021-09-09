@@ -13,18 +13,16 @@ public class Automail {
     	/** Initialize the MailPool */
     	
     	this.mailPool = mailPool;
-    	
-    	/** Initialize robots, currently only regular robots */
-//    	robots = new Robot[numRegRobots];
-//    	for (int i = 0; i < numRegRobots; i++) {
-//            robots[i] = new Robot(delivery, mailPool, i);
-//        }
 
         // Initialize robots
         robots = new ArrayList<Robot>();
+        // incremental robot id
+        int numRobot = 0;
         for (int i = 0; i < numRegRobots; i++) robots.add(new RegularRobot(delivery, mailPool, i));
-        for (int i = 0; i < numFastRobots; i++) robots.add(new FastRobot(delivery, mailPool, i));
-        for (int i = 0; i < numBulkRobots; i++) robots.add(new BulkRobot(delivery, mailPool, i));
+        numRobot += numRegRobots;
+        for (int i = numRobot; i < numRobot+numFastRobots; i++) robots.add(new FastRobot(delivery, mailPool, i));
+        numRobot += numFastRobots;
+        for (int i = numRobot; i < numRobot+numBulkRobots; i++) robots.add(new BulkRobot(delivery, mailPool, i));
 
     }
 
