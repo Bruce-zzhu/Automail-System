@@ -139,7 +139,6 @@ public class Robot {
             current_floor -= moveUnits;
         }
         this.totalUnits += moveUnits;
-        if(this instanceof FastRobot) System.out.println("Move "+moveUnits);
     }
     
     public String getIdTube() {

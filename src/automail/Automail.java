@@ -43,15 +43,10 @@ public class Automail {
         for (Robot robot: robots) {
             if (robot.id.substring(0,1).equals(robotType)) {
                 totalUnits += robot.getTotalUnits();
-                System.out.println(robot.getTotalUnits());
                 num++;
             }
         }
-        if (currentRobot instanceof FastRobot) {
-
-            System.out.println("totalUnits: "+totalUnits);
-        }
-
+        
         if (num != 0) {
             return totalUnits / num;
         } else {
