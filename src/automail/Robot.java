@@ -52,7 +52,7 @@ public class Robot {
         this.deliveryCounter = 0;
         this.totalUnits = 0;
         this.TUBE_CAPACITY = tube_capacity;
-        tube = new ArrayList<>(TUBE_CAPACITY);
+        tube = new ArrayList<>();
     }
     
     /**
@@ -61,7 +61,6 @@ public class Robot {
     public void dispatch() {
     	receivedDispatch = true;
     }
-
 
 
     /**

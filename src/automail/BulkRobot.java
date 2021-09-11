@@ -10,7 +10,6 @@ public class BulkRobot extends Robot {
     }
 
 
-
     @Override
     public void addToTube(MailItem mailItem) throws ItemTooHeavyException {
         this.tube.add(mailItem);

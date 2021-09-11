@@ -11,7 +11,7 @@ public class FastRobot extends Robot {
 
     @Override
     public void addToTube(MailItem mailItem) throws ItemTooHeavyException {
-        // do nothing
+        // do nothing since it doesn't have tube
     }
 
 }

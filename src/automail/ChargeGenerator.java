@@ -10,15 +10,15 @@ public class ChargeGenerator {
     private HashMap<String, Double> typeBasedRate = new HashMap<>();
     private HashMap<Integer, Double> recentServiceFee = new HashMap<>();
 
-    private Automail automail;
+    private Automail automail = null;
     private WifiModem wifiModem;
-    private Building building;
 
     private static ChargeGenerator charger;
 
     private ChargeGenerator() throws Exception {
-        this.building = Building.getInstance();
+        Building building = Building.getInstance();
         this.wifiModem = WifiModem.getInstance(building.getMailroomLocationFloor());
+
         /** Set up type based rate for each robot type **/
         typeBasedRate.put("R", 0.025);
         typeBasedRate.put("F", 0.05);
