@@ -50,12 +50,15 @@ public class MailPool {
 		ListIterator<Item> j = pool.listIterator();
 		if (pool.size() > 0) {
 			try {
-			robot.addToHand(j.next().mailItem); // hand first as we want higher priority delivered first
-			j.remove();
-			if (pool.size() > 0) {
-				robot.addToTube(j.next().mailItem);
+				robot.addToHand(j.next().mailItem); // hand first as we want higher priority delivered first
 				j.remove();
-			}
+
+				// add to tube if tube has space
+				while (pool.size() > 0 && robot.getTubeSize() < robot.TUBE_CAPACITY) {
+					robot.addToTube(j.next().mailItem);
+					j.remove();
+				}
+
 			robot.dispatch(); // send the robot off if it has any items to deliver
 			i.remove();       // remove from mailPool queue
 			} catch (Exception e) { 
