@@ -35,11 +35,14 @@ public class ReportDelivery implements IMailDelivery {
             deliveredItems.add(deliveryItem);
             if (Boolean.parseBoolean(configuration.getProperty(Configuration.FEE_CHARGING_KEY))) {
                 /** need to charge fee, generate fee charging information **/
-                feeInfo = String.format(" | Service Fee : %.2f | Maintenance: %.2f | Avg. Operating Time: %.2f | Total Charge: %.2f"
-                        , charger.getServiceFee(robot)
-                        , charger.getMaintenanceFee(robot)
-                        , charger.getAvgOptTime(robot)
-                        , charger.getTotalCharge(robot));
+                double maintenanceFee = charger.getMaintenanceFee(robot);
+                double serviceFee = charger.getServiceFee(robot);
+                double avgOptTime = charger.getAvgOptTime(robot);
+                feeInfo = String.format(" | Service Fee: %.2f | Maintenance: %.2f | Avg. Operating Time: %.2f | Total Charge: %.2f"
+                        , serviceFee
+                        , maintenanceFee
+                        , avgOptTime
+                        , serviceFee + maintenanceFee);
             }
 
             System.out.printf("T: %3d > %7s-> Delivered(%4d) [%s%s]%n", Clock.Time(), robot.getIdTube(), deliveredItems.size(), deliveryItem.toString(), feeInfo);

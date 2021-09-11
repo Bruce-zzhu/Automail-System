@@ -93,7 +93,6 @@ public class Simulation {
 				System.out.println("Simulation unable to complete.");
 				System.exit(0);
 			}
-
             Clock.Tick();
         }
 

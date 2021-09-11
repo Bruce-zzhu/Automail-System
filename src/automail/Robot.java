@@ -50,7 +50,7 @@ public class Robot {
         this.speed = speed;
         this.receivedDispatch = false;
         this.deliveryCounter = 0;
-        this.totalUnits = current_floor;
+        this.totalUnits = 0;
         this.TUBE_CAPACITY = tube_capacity;
         tube = new ArrayList<>(TUBE_CAPACITY);
     }
@@ -62,6 +62,8 @@ public class Robot {
     	receivedDispatch = true;
     }
 
+
+
     /**
      * This is called on every time step
      * @throws ExcessiveDeliveryException if robot delivers more than the capacity of the tube without refilling
@@ -72,6 +74,7 @@ public class Robot {
     		case RETURNING:
     			/** If its current position is at the mailroom, then the robot should change state */
                 if(current_floor == Building.getInstance().getMailroomLocationFloor()){
+                    spendOneUnit();
         			/** Tell the sorter the robot is ready */
         			mailPool.registerWaiting(this);
                 	changeState(RobotState.WAITING);
@@ -92,7 +95,7 @@ public class Robot {
     		case DELIVERING:
     			if(current_floor == destination_floor){ // If already here drop off either way
                     /** Delivery complete, report this to the simulator! */
-                    totalUnits += 1;
+                    spendOneUnit();
                     delivery.deliver(this, deliveryItem, "");
                     deliveryItem = null;
                     deliveryCounter++;
@@ -131,15 +134,15 @@ public class Robot {
      * @param destination the floor towards which the robot is moving
      */
     public void moveTowards(int destination) {
-        int moveUnits = 0;
+        int moveFloors = 0;
         if(current_floor < destination){
-            moveUnits = Math.min(speed, destination - current_floor);
-            current_floor += moveUnits;
+            moveFloors = Math.min(speed, destination - current_floor);
+            current_floor += moveFloors;
         } else {
-            moveUnits = Math.min(speed, current_floor - destination);
-            current_floor -= moveUnits;
+            moveFloors = Math.min(speed, current_floor - destination);
+            current_floor -= moveFloors;
         }
-        this.totalUnits += moveUnits;
+        spendOneUnit();
     }
     
     public String getIdTube() {
@@ -197,5 +200,9 @@ public class Robot {
         return current_floor;
     }
 
+
+    public void spendOneUnit() {
+        this.totalUnits += 1;
+    }
 
 }

@@ -17,7 +17,6 @@ public class ChargeGenerator {
     private static ChargeGenerator charger;
 
     private ChargeGenerator() throws Exception {
-        this.automail = automail;
         this.building = Building.getInstance();
         this.wifiModem = WifiModem.getInstance(building.getMailroomLocationFloor());
         /** Set up type based rate for each robot type **/
