@@ -70,8 +70,8 @@ public class Simulation {
         MailGenerator mailGenerator = new MailGenerator(mail_to_create, mail_max_weight, mailPool, seedMap);
 
         /** Instantiate ChargeGenerator */
-        ChargeGenerator charger = ChargeGenerator.getInstance();
-        charger.setAutomail(automail);
+        ChargeGenerator chargeGenerator = ChargeGenerator.getInstance();
+        chargeGenerator.setAutomail(automail);
         
         /** Generate all the mails */
         mailGenerator.generateAllMail();

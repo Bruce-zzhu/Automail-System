@@ -13,7 +13,7 @@ public class ChargeGenerator {
     private Automail automail = null;
     private WifiModem wifiModem;
 
-    private static ChargeGenerator charger;
+    private static ChargeGenerator chargeGenerator;
 
     private ChargeGenerator() throws Exception {
         Building building = Building.getInstance();
@@ -31,10 +31,10 @@ public class ChargeGenerator {
     }
 
     public static ChargeGenerator getInstance() throws Exception {
-        if (charger == null) {
-            charger = new ChargeGenerator();
+        if (chargeGenerator == null) {
+            chargeGenerator = new ChargeGenerator();
         }
-        return charger;
+        return chargeGenerator;
     }
 
     public void setAutomail(Automail automail) {
